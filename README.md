@@ -1,4 +1,4 @@
-## Tracer.com & t482.io
+## tracer482.com & t482.io
 
 Personal serverless hosted externally for personal development, promotion, and tool hositng.
 
