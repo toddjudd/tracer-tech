@@ -7,26 +7,24 @@ import 'firebase/auth';
 import { Button } from 'react-bootstrap';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
+// import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 firebase.initializeApp(JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG));
 
 const auth = firebase.auth();
-const firestore = firebase.firestore();
+// const firestore = firebase.firestore();
 
 const App = () => {
-  const [user, loading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   return (
     <div className='App'>
       <header className='App-header'>
         <SignOut />
       </header>
-      <section className='App-section'>
-        {user ? <Welcome /> : <SignIn />}
-      </section>
+      <section className='App-section'>{user ? <Welcome /> : <SignIn />}</section>
     </div>
   );
 };
@@ -55,7 +53,8 @@ const SignOut = () => {
           className='sign-out'
           onClick={() => {
             auth.signOut();
-          }}>
+          }}
+        >
           Sign Out
         </Button>
       </>
