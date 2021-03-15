@@ -11,7 +11,15 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
-firebase.initializeApp(JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG));
+firebase.initializeApp({
+  apiKey: 'AIzaSyBRcMvWr5ebXGpYzrvKeqFg2Ua1EKKgiP0',
+  authDomain: 'tracer-tech.firebaseapp.com',
+  databaseURL: 'https://tracer-tech-default-rtdb.firebaseio.com',
+  projectId: 'tracer-tech',
+  storageBucket: 'tracer-tech.appspot.com',
+  messagingSenderId: '554765066642',
+  appId: '1:554765066642:web:66f145f9193b5f4806214b',
+});
 
 const auth = firebase.auth();
 // const firestore = firebase.firestore();
