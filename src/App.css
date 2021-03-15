@@ -1,20 +1,41 @@
 .App {
   text-align: center;
+  background-color: #2c2e35;
+  min-height: 100vh;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  caret-color: transparent;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  justify-content: stretch;
 }
 
-.App-logo {
+.App-logo-icon {
+  height: 10vmin;
+  pointer-events: none;
+}
+
+.App-logo-main {
   height: 40vmin;
   pointer-events: none;
 }
 
 .App-header {
-  background-color: #2c2e35;
-  min-height: 100vh;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: 'logo . sign-out';
+  align-items: center;
+  padding: 12px;
+  background: #202224;
+}
+
+.App-section {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  caret-color: transparent;
+  align-items: center;
+}
+
+.sign-out {
+  grid-area: sign-out;
 }

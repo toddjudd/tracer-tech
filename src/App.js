@@ -4,11 +4,14 @@ import './App.css';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { Button } from 'react-bootstrap';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
-firebase.initializeApp(process.env.REACT_APP_FIREBASE_CONFIG);
+firebase.initializeApp(JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG));
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
@@ -19,10 +22,11 @@ const App = () => {
   return (
     <div className='App'>
       <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
         <SignOut />
       </header>
-      <section>{user ? <Welcome /> : <SignIn />}</section>
+      <section className='App-section'>
+        {user ? <Welcome /> : <SignIn />}
+      </section>
     </div>
   );
 };
@@ -34,9 +38,10 @@ const SignIn = () => {
   };
   return (
     <>
-      <button className='sign-in' onClick={signInWithGoogle}>
-        Sign In With Google
-      </button>
+      <img src={logo} className='App-logo-main' alt='logo' />
+      <Button className='sign-in' onClick={signInWithGoogle}>
+        Sign In With Google <FontAwesomeIcon icon={faGoogle} />
+      </Button>
     </>
   );
 };
@@ -44,17 +49,22 @@ const SignIn = () => {
 const SignOut = () => {
   return (
     auth.currentUser && (
-      <button
-        className='sign-out'
-        onClick={() => {
-          auth.signOut();
-        }}></button>
+      <>
+        <img src={logo} className='App-logo-icon' alt='logo' />
+        <Button
+          className='sign-out'
+          onClick={() => {
+            auth.signOut();
+          }}>
+          Sign Out
+        </Button>
+      </>
     )
   );
 };
 
 const Welcome = () => {
-  <h1>Welcome {auth.currentUser.displayName}</h1>;
+  return <h1>Welcome {auth.currentUser.displayName}</h1>;
 };
 
 export default App;
