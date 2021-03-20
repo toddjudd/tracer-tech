@@ -32,7 +32,9 @@ const App = () => {
       <header className='App-header'>
         <SignOut />
       </header>
-      <section className='App-section'>{user ? <Welcome /> : <SignIn />}</section>
+      <section className='App-section'>
+        {user ? <Welcome /> : <SignIn />}
+      </section>
     </div>
   );
 };
@@ -61,8 +63,7 @@ const SignOut = () => {
           className='sign-out'
           onClick={() => {
             auth.signOut();
-          }}
-        >
+          }}>
           Sign Out
         </Button>
       </>
@@ -71,7 +72,12 @@ const SignOut = () => {
 };
 
 const Welcome = () => {
-  return <h1>Welcome {auth.currentUser.displayName}</h1>;
+  console.log(auth.currentUser.getIdToken(true));
+  return (
+    <>
+      <h1>Welcome {auth.currentUser.displayName}</h1>
+    </>
+  );
 };
 
 export default App;

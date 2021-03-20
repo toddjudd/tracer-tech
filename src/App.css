@@ -1,8 +1,8 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
   background-color: #2c2e35;
   min-height: 100vh;
-  font-size: calc(10px + 2vmin);
+  /* font-size: calc(10px + 2vmin); */
   color: white;
   caret-color: transparent;
   display: grid;
@@ -30,10 +30,10 @@
 }
 
 .App-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: center; */
+  /* align-items: center; */
 }
 
 .sign-out {
