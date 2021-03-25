@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable max-len */
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
  *
@@ -79,19 +81,25 @@ const validateFirebaseIdToken = async (req, res, next) => {
 app.use(cors);
 app.use(cookieParser);
 app.post('/login/oauth/access_token', (req, res) => {
-  userAccessToken =
+  console.log('access_token');
+  const userAccessToken =
     'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY4NDY2MjEyMTQxMjQ4NzUxOWJiZjhlYWQ4ZGZiYjM3ODYwMjk5ZDciLCJ0eXAiOiJKV1QifQ';
   res.send(`access_token=${userAccessToken}&token_type=bearer
   `);
 });
 app.post('/json', (req, res) => {
+  console.log('json post');
+  const { header, body, cookies } = req;
   res.status(200).send({ header, body, cookies });
 });
 app.get('/json', (req, res) => {
+  console.log('json get');
+  const { header, params, cookies } = req;
   res.status(200).send({ header, params, cookies });
 });
 app.use(validateFirebaseIdToken);
 app.get('/hello', (req, res) => {
+  console.log('hello');
   res.send(`Hello ${req.user.name}`);
 });
 
