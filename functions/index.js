@@ -21,7 +21,7 @@ admin.initializeApp();
 const express = require('express');
 const cookieParser = require('cookie-parser')();
 const cors = require('cors')({ origin: true });
-const api = express();
+const app = express();
 
 // Express middleware that validates Firebase ID Tokens passed in the Authorization HTTP header.
 // The Firebase ID token needs to be passed as a Bearer token in the Authorization HTTP header like this:
@@ -76,26 +76,26 @@ const validateFirebaseIdToken = async (req, res, next) => {
   }
 };
 
-api.use(cors);
-api.use(cookieParser);
-api.post('/login/oauth/access_token', (req, res) => {
+app.use(cors);
+app.use(cookieParser);
+app.post('/login/oauth/access_token', (req, res) => {
   userAccessToken =
     'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY4NDY2MjEyMTQxMjQ4NzUxOWJiZjhlYWQ4ZGZiYjM3ODYwMjk5ZDciLCJ0eXAiOiJKV1QifQ';
   res.send(`access_token=${userAccessToken}&token_type=bearer
   `);
 });
-api.post('/json', (req, res) => {
+app.post('/json', (req, res) => {
   res.status(200).send({ header, body, cookies });
 });
-api.get('/json', (req, res) => {
+app.get('/json', (req, res) => {
   res.status(200).send({ header, params, cookies });
 });
-api.use(validateFirebaseIdToken);
-api.get('/hello', (req, res) => {
+app.use(validateFirebaseIdToken);
+app.get('/hello', (req, res) => {
   res.send(`Hello ${req.user.name}`);
 });
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.
 // Requests need to be authorized by providing an `Authorization` HTTP header
 // with value `Bearer <Firebase ID Token>`.
-exports.api = functions.https.onRequest(api);
+exports.app = functions.https.onRequest(app);
