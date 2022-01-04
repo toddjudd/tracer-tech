@@ -5,22 +5,18 @@ import { useFirebaseAuth } from '../../../lib/auth';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-export const LoginForm = () => {
+export const LogoutButton = () => {
   const { user, auth } = useFirebaseAuth();
-  const signInWithGoogle = () => {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).then(() => navigate('/app/profile'));
+  const navigate = useNavigate();
+  const signOut = () => {
+    auth.signOut();
+    navigate('/');
   };
 
-  const navigate = useNavigate();
-
-  if (user) {
-    navigate('/app/profile');
-    return <h1>what the hell</h1>;
-  }
+  if (!user) return null;
   return (
-    <Button className='login' onClick={signInWithGoogle}>
-      Sign In With Google <FontAwesomeIcon icon={faGoogle} />
+    <Button className='logout' onClick={signOut}>
+      Log Out
     </Button>
   );
 };
