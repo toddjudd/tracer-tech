@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-undef */
 /* eslint-disable indent */
 /* eslint-disable max-len */
 /**
@@ -22,6 +24,7 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 const express = require('express');
 const cookieParser = require('cookie-parser')();
+const puppeteer = require('puppeteer');
 const cors = require('cors')({ origin: true });
 const app = express();
 
@@ -80,6 +83,77 @@ const validateFirebaseIdToken = async (req, res, next) => {
 
 app.use(cors);
 app.use(cookieParser);
+app.get('/fantasy-callendar/:calendar/epoch_data', async (req, res) => {
+  console.log(req.params.calendar);
+  const getMoonData = async (moonIndex, page) => {
+    const svgSelector = `.current_day>[x-show="day.moons.length > 0"]>[moon="${moonIndex}"]`;
+    await page.hover(svgSelector);
+    return await page.evaluate((svgSelector) => {
+      return {
+        desciption: document.querySelector(
+          '[x-data="moon_tooltip"]>[x-text="title"]'
+        ).innerHTML,
+        svg: document.querySelector(svgSelector).outerHTML,
+      };
+    }, svgSelector);
+  };
+
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto(
+    'https://app.fantasy-calendar.com/calendars/b4d8ba8ce6bc923d9080ad0d56ecc723'
+  );
+  const { static_data, dynamic_data, epoch_data, events } = await page.evaluate(
+    () => {
+      return {
+        static_data,
+        dynamic_data,
+        epoch_data:
+          evaluated_static_data.epoch_data[
+            document.querySelector('.current_day').getAttribute('epoch')
+          ],
+        events,
+      };
+    }
+  );
+  const moon_data = await Promise.all(
+    static_data.moons.map(async (moon, i) => {
+      const scraped_data = await getMoonData(i, page);
+      return { ...moon, ...scraped_data };
+    })
+  );
+  const { weather_icon_class } = await page.evaluate(() => {
+    return {
+      weather_icon_class: document.querySelector(
+        '.current_day>.day_row>.weather_popup>i'
+      ).classList['value'],
+    };
+  });
+  await browser.close();
+
+  const data = {
+    static_data,
+    ...dynamic_data,
+    ...epoch_data,
+    weather: { ...epoch_data.weather, weather_icon_class },
+    moons: moon_data,
+    timespan: {
+      ...static_data.year_data.timespans[dynamic_data.timespan],
+      index: dynamic_data.timespan,
+    },
+    current_era: {
+      ...static_data.eras[dynamic_data.current_era],
+      index: dynamic_data.current_era,
+    },
+    events: events.filter(
+      (event) =>
+        event.data.date[0] === dynamic_data.year &&
+        event.data.date[1] === dynamic_data.timespan &&
+        event.data.date[2] === dynamic_data.day
+    ),
+  };
+  res.status(200).send(data);
+});
 app.post('/login/oauth/access_token', (req, res) => {
   console.log('access_token');
   const userAccessToken =
@@ -106,4 +180,13 @@ app.get('/hello', (req, res) => {
 // This HTTPS endpoint can only be accessed by your Firebase Users.
 // Requests need to be authorized by providing an `Authorization` HTTP header
 // with value `Bearer <Firebase ID Token>`.
-exports.app = functions.https.onRequest(app);
+exports.app = functions
+  .runWith({
+    timeoutSeconds: 300,
+    memory: '1GB',
+  })
+  .https.onRequest(app);
+
+exports.hello = functions.https.onRequest((res) => {
+  res.send('hello world');
+});
