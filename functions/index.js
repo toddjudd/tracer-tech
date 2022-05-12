@@ -164,13 +164,13 @@ app.post('/login/oauth/access_token', (req, res) => {
 app.post('/json', (req, res) => {
   console.log('json post');
   const { header, body, cookies } = req;
-  console.log({ header, body, cookies });
+  console.log(JSON.stringify(body));
   res.status(200).send({ header, body, cookies });
 });
 app.get('/json', (req, res) => {
   console.log('json get');
   const { header, params, cookies } = req;
-  console.log({ header, body, cookies });
+  console.log(JSON.stringify(body));
   res.status(200).send({ header, params, cookies });
 });
 app.use(validateFirebaseIdToken);
