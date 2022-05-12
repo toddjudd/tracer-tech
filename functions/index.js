@@ -170,7 +170,7 @@ app.post('/json', (req, res) => {
 app.get('/json', (req, res) => {
   console.log('json get');
   const { header, params, cookies } = req;
-  console.log(JSON.stringify(body));
+  console.log(JSON.stringify(params));
   res.status(200).send({ header, params, cookies });
 });
 app.use(validateFirebaseIdToken);
