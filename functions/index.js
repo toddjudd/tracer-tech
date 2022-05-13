@@ -25,6 +25,7 @@ admin.initializeApp();
 const express = require('express');
 const cookieParser = require('cookie-parser')();
 const puppeteer = require('puppeteer');
+const { setResponders } = require('./services/jira.service');
 const cors = require('cors')({ origin: true });
 const app = express();
 
@@ -160,6 +161,16 @@ app.post('/login/oauth/access_token', (req, res) => {
     'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY4NDY2MjEyMTQxMjQ4NzUxOWJiZjhlYWQ4ZGZiYjM3ODYwMjk5ZDciLCJ0eXAiOiJKV1QifQ';
   res.send(`access_token=${userAccessToken}&token_type=bearer
   `);
+});
+app.post('/jira/setResponders', (req, res) => {
+  setResponders(req.body.issue.id)
+    .then(() => {
+      res.status(200).send({ message: 'success' });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(200).send({ message: 'error', error });
+    });
 });
 app.post('/json', (req, res) => {
   console.log('json post');
