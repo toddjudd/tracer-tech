@@ -22,6 +22,7 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 const express = require('express');
 const cookieParser = require('cookie-parser')();
+// const router = require('./router.js');
 const cors = require('cors')({ origin: true });
 const app = express();
 
@@ -80,13 +81,7 @@ const validateFirebaseIdToken = async (req, res, next) => {
 
 app.use(cors);
 app.use(cookieParser);
-app.post('/login/oauth/access_token', (req, res) => {
-  console.log('access_token');
-  const userAccessToken =
-    'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY4NDY2MjEyMTQxMjQ4NzUxOWJiZjhlYWQ4ZGZiYjM3ODYwMjk5ZDciLCJ0eXAiOiJKV1QifQ';
-  res.send(`access_token=${userAccessToken}&token_type=bearer
-  `);
-});
+// app.use(router);
 app.post('/json', (req, res) => {
   console.log('json post');
   const { header, body, cookies } = req;
