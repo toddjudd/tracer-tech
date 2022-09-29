@@ -17,7 +17,7 @@ const setResponders = (ticketId) => {
     method: 'put',
     url: `https://vectornet.atlassian.net/rest/api/3/issue/${ticketId}`,
     headers: {
-      Authorization: `Basic ${process.env.VECTORNET_JIRA_APITOKEN}`,
+      Authorization: `Basic ${process.env.JIRA}`,
       'Content-Type': 'application/json',
     },
     data: data,

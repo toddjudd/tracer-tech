@@ -199,7 +199,3 @@ exports.app = functions
     memory: '1GB',
   })
   .https.onRequest(app);
-
-exports.hello = functions.https.onRequest((res) => {
-  res.send('hello world');
-});
